@@ -1,19 +1,24 @@
+@font-face {
+    font-family: 'NasalizationRg';
+    src: url('Nasalization Rg.otf') format('opentype');
+}
+
+.nasalization {
+    font-family: 'NasalizationRg', sans-serif;
+    font-size: 24px;
+    color: #333; /* You can change the color */
+}
+
+
 html, body {
     width:  100%;
     height: 100%;
     margin: 0;
 }
-/* Load the font PressStart2P-Regular.ttf */
-@font-face {
-    font-family: 'Press Start 2P';
-    src: url('fonts/PressStart2P-Regular.ttf');
 }
-@font-face {
-    font-family: 'VT323';
-    src: url('fonts/VT323-Regular.ttf');
 }
 body {
-    font-family: 'Press Start 2P', 'VT323', Arial;
+    font-family: 'NasalizationRg', 'NasalizationRg', NasalizationRg;
     background-color: #000000;
     color: #ffffff;
     caret-color: #e6d577;
