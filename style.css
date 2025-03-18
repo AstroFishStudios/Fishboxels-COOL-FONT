@@ -4,7 +4,7 @@
 }
 
 .nasalization {
-    font-family: 'NasalizationRg', sans-serif;
+    font-family: 'NasalizationRg', NasalizationRg;
     font-size: 24px;
     color: #333; /* You can change the color */
 }
@@ -18,7 +18,7 @@ html, body {
 }
 }
 body {
-    font-family: 'NasalizationRg', 'NasalizationRg', NasalizationRg;
+    font-family: 'NasalizationRg', 'NasalizationRg',
     background-color: #000000;
     color: #ffffff;
     caret-color: #e6d577;
