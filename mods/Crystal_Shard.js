@@ -1,6 +1,7 @@
-// Crystal Shard Item Mod
+// Crystal Shard Item Mod with Adjustable Size and Category Name
 
 var colors = ["#87CEEB", "#00BFFF", "#1E90FF", "#4682B4", "#5F9EA0"];
+var newCategoryName = "cool_spawners"; // Change this to the desired category name
 
 elements.crystal_shard = {
     color: colors,
@@ -9,11 +10,11 @@ elements.crystal_shard = {
         "XX|CH:crystal_core|XX",
         "XX|XX|XX",
     ],
-    category: "spawners",
+    category: newCategoryName,
     state: "solid",
     hardness: 0.5,
     breakInto: "crystal_dust",
-    maxSize: 1,
+    maxSize: 5, // Change this value to make the crystal bigger
     cooldown: defaultCooldown,
 }
 
@@ -27,9 +28,9 @@ elements.crystal_core = {
     state: "solid",
     hardness: 0.8,
     breakInto: "crystal_shard",
-    maxSize: 1,
+    maxSize: 5, // Change this value to make the crystal core bigger
     cooldown: defaultCooldown,
-    category: "spawners"
+    category: newCategoryName
 }
 
 elements.crystal_dust = {
