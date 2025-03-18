@@ -18587,35 +18587,7 @@ window.onload = function() {
             };
             affRequest.send();
         </script> -->
-        <p id="langSelectP">🌐 <span id="langSelectLabel">Language</span> <a href="https://sandboxels.R74n.com/translate" target="_blank">[BETA]</a>: <select onchange="if (this.value === 'en'){setSetting('lang',null)}else{setSetting('lang',this.value)}location.reload()" id="langSelect">
-            <option selected value="en">English (American)</option>
-            <option value="en_gb">English (British)</option>
-            <option value="en_ca">English (Canadian)</option>
-            <option value="es">Español</option>
-            <option value="cs">Čeština</option>
-            <option value="de">Deutsch</option>
-            <option value="fr">Français</option>
-            <option value="hu">Magyar</option>
-            <option value="pl">Polski</option>
-            <option value="pt_br">Português (Brasil)</option>
-            <option value="ru">Русский Язык</option>
-            <option value="tr">Türkçe</option>
-            <option value="vi">Tiếng Việt</option>
-            <option value="zh_cn">简体中文</option>
-            <option value="zh_hant">繁體中文</option>
-            <optgroup label="Incomplete">
-                <option value="uk">Українська Мова</option>
-                <option value="tok">Toki Pona</option>
-                <option value="qha">Halacae</option>
-            </optgroup>
-        </select></p>
-        <script>
-            if (standalone) { // move langSelect to Settings
-                let span = document.getElementById("setting-span-lang");
-                span.appendChild(document.getElementById("langSelect"));
-                span.style.display = "block";
-                document.getElementById("langSelectP").style.display = "none";
-            }
+        
         </script>
        
             }
