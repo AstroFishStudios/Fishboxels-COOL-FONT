@@ -32,5 +32,19 @@ whenAvailable(["elements"], function() {
         stateHigh: "steam", // Turns into steam when heated
         conduct: false, // Does not conduct heat
         category: "liquids",
+        tick: function(pixel) {
+            // Find all human pixels
+            var nearbyHumans = findPixels("human", pixel.x, pixel.y, 10);
+            for (var i = 0; i < nearbyHumans.length; i++) {
+                var human = nearbyHumans[i];
+                // Make the human move towards the Diddy Oil
+                if (human) {
+                    var dx = pixel.x - human.x;
+                    var dy = pixel.y - human.y;
+                    human.vx += dx * 0.01; // Adjust the attraction strength as needed
+                    human.vy += dy * 0.01; // Adjust the attraction strength as needed
+                }
+            }
+        },
     };
 });
