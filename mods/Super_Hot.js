@@ -33,19 +33,30 @@ whenAvailable(["elements"], function() {
         tick: function(pixel) {
             pixel.temp = 1e102; // Maintain temperature at 100 googol degrees
         },
+        burn: 100,
+        burnTime: 200,
+        burnInto: ["fire", "smoke"],
     };
 
-    elements.super_hot_physics = {
-        name: "SUPER HOT PHYSICS",
-        color: "#ff4500",
-        behavior: behaviors.POWDER,
-        category: "solids",
-        state: "solid",
-        density: 8000,
-        temp: 1e102, // 100 googol degrees
-        conduct: true, // Transfer heat
-        tick: function(pixel) {
-            pixel.temp = 1e102; // Maintain temperature at 100 googol degrees
-        },
+    elements.fire = {
+        name: "fire",
+        color: ["#ff4500", "#ff4500", "#ff4500"], // Original fire colors
+        behavior: behaviors.GAS,
+        temp: 500,
+        category: "gases",
+        state: "gas",
+        density: 1,
+        burn: 20,
+        burnTime: 50,
+    };
+
+    elements.smoke = {
+        name: "smoke",
+        color: ["#696969", "#808080", "#a9a9a9"], // Original smoke colors
+        behavior: behaviors.GAS,
+        temp: 20,
+        category: "gases",
+        state: "gas",
+        density: 0.5,
     };
 });
