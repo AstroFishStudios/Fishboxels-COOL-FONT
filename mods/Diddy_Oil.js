@@ -24,17 +24,13 @@ whenAvailable(["elements"], function() {
     elements.diddy_oil = {
         name: "Diddy Oil",
         color: "#f5deb3",
-        behavior: [
-            "XX|XX|XX",
-            "XX|M1|XX",
-            "XX|XX|XX"
-        ],
-        category: "liquids",
+        behavior: behaviors.LIQUID,
+        viscosity: 10000, // Higher viscosity to make it sticky
         state: "liquid",
         density: 800,
-        viscosity: 10000, // Higher viscosity to make it sticky
         tempHigh: 300, // Temperature at which it evaporates
         stateHigh: "steam", // Turns into steam when heated
         conduct: false, // Does not conduct heat
+        category: "liquids",
     };
 });
