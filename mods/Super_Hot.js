@@ -28,10 +28,10 @@ whenAvailable(["elements"], function() {
         category: "solids",
         state: "solid",
         density: 8000,
-        temp: 1e100, // 1 googol degrees
+        temp: 1e102, // 100 googol degrees
         conduct: true, // Transfer heat
         tick: function(pixel) {
-            pixel.temp = 1e100; // Maintain temperature at 1 googol degrees
+            pixel.temp = 1e102; // Maintain temperature at 100 googol degrees
         },
     };
 });
