@@ -67,7 +67,7 @@ whenAvailable(["elements", "behaviors", "createPixel", "deletePixel", "isEmpty",
                 }
             }
         },
-        category: "DIDDY",
+        category: "structures",
         insulate: true,
         state: "solid",
         excludeRandom: true,
