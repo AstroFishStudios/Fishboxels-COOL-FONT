@@ -22,12 +22,16 @@ var modName = "mods/super_hot.js";
 
 whenAvailable(["elements"], function() {
     elements.super_hot = {
+        name: "SUPER HOT",
         color: "#ff4500",
         behavior: behaviors.WALL,
         category: "solids",
         state: "solid",
         density: 8000,
-        temp: 1e12, // 1 trillion degrees
-        conduct: true,
+        temp: 1e100, // 1 googol degrees
+        conduct: true, // Transfer heat
+        tick: function(pixel) {
+            pixel.temp = 1e100; // Maintain temperature at 1 googol degrees
+        },
     };
 });
