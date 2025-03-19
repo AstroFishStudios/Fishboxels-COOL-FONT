@@ -38,11 +38,7 @@ whenAvailable(["elements"], function() {
     elements.super_hot_physics = {
         name: "SUPER HOT PHYSICS",
         color: "#ff4500",
-        behavior: [
-            "XX|XX|XX",
-            "M2|M1|M2",
-            "XX|XX|XX"
-        ],
+        behavior: behaviors.POWDER,
         category: "solids",
         state: "solid",
         density: 8000,
