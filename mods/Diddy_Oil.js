@@ -31,6 +31,6 @@ whenAvailable(["elements"], function() {
         tempHigh: 300, // Temperature at which it evaporates
         stateHigh: "steam", // Turns into steam when heated
         conduct: false, // Does not conduct heat
-        category: "liquids"
+        category: "liquids",
     };
 });
