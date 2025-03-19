@@ -5,7 +5,7 @@ function whenAvailable(names, callback) {
     var interval = 10; // ms
     window.setTimeout(function() {
         let bool = true;
-        for(let i = 0; i < names.length; i++) {
+        for (let i = 0; i < names.length; i++) {
             if (!window[names[i]]) {
                 bool = false;
             }
@@ -33,16 +33,22 @@ whenAvailable(["elements"], function() {
         conduct: false, // Does not conduct heat
         category: "liquids",
         tick: function(pixel) {
-            // Find all human pixels
-            var nearbyHumans = findPixels("human", pixel.x, pixel.y, 10);
-            for (var i = 0; i < nearbyHumans.length; i++) {
-                var human = nearbyHumans[i];
-                // Make the human move towards the Diddy Oil
-                if (human) {
-                    var dx = pixel.x - human.x;
-                    var dy = pixel.y - human.y;
-                    human.vx += dx * 0.01; // Adjust the attraction strength as needed
-                    human.vy += dy * 0.01; // Adjust the attraction strength as needed
+            if (!pixel.tickCount) pixel.tickCount = 0;
+            pixel.tickCount++;
+
+            // Reduce the frequency of the attraction logic to every 10 ticks
+            if (pixel.tickCount % 10 === 0) {
+                // Find all human pixels within a radius of 10
+                var nearbyHumans = findPixels("human", pixel.x, pixel.y, 10);
+                for (var i = 0; i < nearbyHumans.length; i++) {
+                    var human = nearbyHumans[i];
+                    // Make the human move towards the Diddy Oil
+                    if (human) {
+                        var dx = pixel.x - human.x;
+                        var dy = pixel.y - human.y;
+                        human.vx += dx * 0.01; // Adjust the attraction strength as needed
+                        human.vy += dy * 0.01; // Adjust the attraction strength as needed
+                    }
                 }
             }
         },
