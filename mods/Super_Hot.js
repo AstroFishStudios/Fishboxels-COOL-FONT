@@ -37,24 +37,3 @@ whenAvailable(["elements"], function() {
         burnTime: 200,
         burnInto: ["fire", "smoke"],
     };
-
-    elements.fire = {
-        name: "fire",
-        behavior: behaviors.GAS,
-        temp: 500,
-        category: "gases",
-        state: "gas",
-        density: 1,
-        burn: 20,
-        burnTime: 50,
-    };
-
-    elements.smoke = {
-        name: "smoke",
-        behavior: behaviors.GAS,
-        temp: 20,
-        category: "gases",
-        state: "gas",
-        density: 0.5,
-    };
-});
