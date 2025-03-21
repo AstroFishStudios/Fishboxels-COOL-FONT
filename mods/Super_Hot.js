@@ -33,7 +33,19 @@ whenAvailable(["elements"], function() {
         tick: function(pixel) {
             pixel.temp = 1e102; // Maintain temperature at 100 googol degrees
         },
-        burn: 100,
-        burnTime: 200,
-        burnInto: ["fire", "smoke"],
     };
+
+    elements.super_hot_physics = {
+        name: "SUPER HOT PHYSICS",
+        color: "#ff4500",
+        behavior: behaviors.POWDER,
+        category: "solids",
+        state: "solid",
+        density: 8000,
+        temp: 1e102, // 100 googol degrees
+        conduct: true, // Transfer heat
+        tick: function(pixel) {
+            pixel.temp = 1e102; // Maintain temperature at 100 googol degrees
+        },
+    };
+});
