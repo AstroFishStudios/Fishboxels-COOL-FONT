@@ -1,4 +1,4 @@
-// Menu Block Mod
+// Mod Menu Bar
 // Created by: Fischy6734
 // Created on: 2025-05-22
 
@@ -19,14 +19,32 @@ function whenAvailable(names, callback) {
     }, interval);
 }
 
-var modName = "mods/menu_block_mod.js";
+var modName = "mods/mod_menu_bar.js";
 
-whenAvailable(["elements", "pixelMap"], function() {
-    // Create the mod menu UI if it doesn't exist
-    if (!document.getElementById("modMenuContainer")) {
-        let menuDiv = document.createElement("div");
-        menuDiv.id = "modMenuContainer";
-        menuDiv.style.cssText = `
+whenAvailable(["elements"], function() {
+    // Add the style for the mod menu button
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.id = 'modMenuStylesheet';
+    style.innerHTML = `
+        .modMenuButton {
+            background: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-family: inherit;
+        }
+        .modMenuButton:hover {
+            background: #444;
+        }
+        .modStatus {
+            color: #E11;
+            text-decoration: none;
+        }
+        #modMenuContainer {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -41,18 +59,82 @@ whenAvailable(["elements", "pixelMap"], function() {
             min-width: 300px;
             max-height: 80vh;
             overflow-y: auto;
-        `;
-        document.body.appendChild(menuDiv);
+        }
+        .mod-category {
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .mod-item {
+            background: #444;
+            padding: 5px;
+            margin: 5px 0;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    `;
+    document.getElementsByTagName('head')[0].appendChild(style);
+
+    // Create the mod menu button in the top bar
+    let topBar = document.querySelector('.topbar') || document.getElementById('topbar');
+    if (topBar) {
+        let modMenuButton = document.createElement('button');
+        modMenuButton.className = 'modMenuButton';
+        modMenuButton.innerHTML = '🔧 Mods';
+        modMenuButton.onclick = toggleModMenu;
+        topBar.insertBefore(modMenuButton, topBar.firstChild);
     }
 
-    // Function to create the menu content
-    function createMenuContent() {
-        return `
+    // Create the mod menu container
+    let menuDiv = document.createElement('div');
+    menuDiv.id = 'modMenuContainer';
+    document.body.appendChild(menuDiv);
+
+    // Mod menu state
+    let modMenuOpen = false;
+
+    // Toggle mod menu function
+    function toggleModMenu() {
+        modMenuOpen = !modMenuOpen;
+        menuDiv.style.display = modMenuOpen ? 'block' : 'none';
+        if (modMenuOpen) {
+            updateModMenu();
+        }
+        // Update the button style
+        document.getElementById('modMenuStylesheet').innerHTML = 
+            `.modStatus { color: ${modMenuOpen ? '#1E1' : '#E11'}; text-decoration: ${modMenuOpen ? 'underline' : 'none'}; }`;
+    }
+
+    // Function to update the mod menu content
+    function updateModMenu() {
+        const modCategories = {
+            "Fun Stuff": ["rainbow_powder", "bouncy_ball", "party_pixel"],
+            "Effects": ["magic_paint", "disco_floor", "firework_launcher"],
+            "Tools": ["super_hot", "steel_glow", "realistic_metal"],
+            "Elements": ["diddy_oil", "bust", "metals"]
+        };
+
+        let content = `
             <h2 style="color: #4CAF50; text-align: center; margin-bottom: 20px;">Mod Menu</h2>
-            <div id="modCategories" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-                ${createModButtons()}
+            <div id="modCategories">
+                ${Object.entries(modCategories).map(([category, mods]) => `
+                    <div class="mod-category">
+                        <h3 style="margin: 0; color: #4CAF50;">${category}</h3>
+                        ${mods.map(mod => `
+                            <div class="mod-item">
+                                <span>${mod}</span>
+                                <input type="checkbox" 
+                                    ${enabledMods.includes(`mods/${mod}.js`) ? 'checked' : ''}
+                                    onchange="window.toggleMod('${mod}')">
+                            </div>
+                        `).join('')}
+                    </div>
+                `).join('')}
             </div>
-            <button onclick="window.closeModMenu()" style="
+            <button onclick="window.toggleModMenu()" style="
                 position: absolute;
                 top: 10px;
                 right: 10px;
@@ -64,66 +146,11 @@ whenAvailable(["elements", "pixelMap"], function() {
                 cursor: pointer;
             ">✕</button>
         `;
+
+        menuDiv.innerHTML = content;
     }
 
-    // Function to create mod category buttons
-    function createModButtons() {
-        const modCategories = {
-            "Fun Stuff": ["rainbow_powder", "bouncy_ball", "party_pixel"],
-            "Effects": ["magic_paint", "disco_floor", "firework_launcher"],
-            "Tools": ["super_hot", "steel_glow", "realistic_metal"],
-            "Elements": ["diddy_oil", "bust", "metals"]
-        };
-
-        return Object.entries(modCategories).map(([category, mods]) => `
-            <div class="mod-category" style="
-                background: #333;
-                padding: 10px;
-                border-radius: 5px;
-                text-align: center;
-                cursor: pointer;
-                transition: background 0.3s;
-            " onclick="window.toggleModCategory('${category}')">
-                <h3 style="margin: 0; color: #4CAF50;">${category}</h3>
-                <div id="${category.replace(/\s+/g, '')}" style="display: none;">
-                    ${mods.map(mod => `
-                        <div style="
-                            margin: 5px 0;
-                            padding: 5px;
-                            background: #444;
-                            border-radius: 3px;
-                        ">
-                            <label style="display: flex; align-items: center; justify-content: space-between;">
-                                <span>${mod}</span>
-                                <input type="checkbox" onchange="window.toggleMod('${mod}')" 
-                                    ${enabledMods.includes(`mods/${mod}.js`) ? 'checked' : ''}>
-                            </label>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    // Add global functions for the menu
-    window.openModMenu = function() {
-        const menuDiv = document.getElementById("modMenuContainer");
-        menuDiv.style.display = "block";
-        menuDiv.innerHTML = createMenuContent();
-    };
-
-    window.closeModMenu = function() {
-        const menuDiv = document.getElementById("modMenuContainer");
-        menuDiv.style.display = "none";
-    };
-
-    window.toggleModCategory = function(category) {
-        const categoryDiv = document.getElementById(category.replace(/\s+/g, ''));
-        if (categoryDiv) {
-            categoryDiv.style.display = categoryDiv.style.display === "none" ? "block" : "none";
-        }
-    };
-
+    // Function to toggle mods
     window.toggleMod = function(mod) {
         const modPath = `mods/${mod}.js`;
         if (enabledMods.includes(modPath)) {
@@ -132,53 +159,11 @@ whenAvailable(["elements", "pixelMap"], function() {
             enabledMods.push(modPath);
         }
         localStorage.setItem("enabledMods", JSON.stringify(enabledMods));
-        // Reload the page to apply changes
         if (confirm("Reload page to apply changes?")) {
             location.reload();
         }
     };
 
-    // Add the menu block element
-    elements.menu_block = {
-        name: "Mod Menu",
-        color: "#4CAF50",
-        behavior: behaviors.WALL,
-        category: "solids",
-        state: "solid",
-        info: "Select and click to open the mod menu!",
-        // Remove onClick as it won't work directly
-        
-        // This function runs when the element is placed
-        create: function(pixel) {
-            pixel.color = "#4CAF50";
-        },
-        
-        // This is the key change - use click instead of onClick
-        click: function(pixel) {
-            window.openModMenu();
-            return true; // Prevent the element from being destroyed on click
-        },
-        
-        tick: function(pixel) {
-            // Add a slight pulsing effect
-            if (pixelTicks % 30 === 0) {
-                pixel.color = `hsl(${(pixelTicks / 2) % 360}, 70%, 60%)`;
-            }
-        }
-    };
-
-    // Add CSS for hover effects
-    if (!document.getElementById("modMenuStyles")) {
-        const style = document.createElement('style');
-        style.id = "modMenuStyles";
-        style.textContent = `
-            #modMenuContainer .mod-category:hover {
-                background: #444 !important;
-            }
-            #modMenuContainer input[type="checkbox"] {
-                cursor: pointer;
-            }
-        `;
-        document.head.appendChild(style);
-    }
+    // Make toggleModMenu available globally
+    window.toggleModMenu = toggleModMenu;
 });
