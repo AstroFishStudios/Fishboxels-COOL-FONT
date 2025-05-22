@@ -1,6 +1,6 @@
 // Menu Block Mod
 // Created by: Fischy6734
-// Created on: 2025-05-21
+// Created on: 2025-05-22
 
 function whenAvailable(names, callback) {
     var interval = 10; // ms
@@ -21,27 +21,29 @@ function whenAvailable(names, callback) {
 
 var modName = "mods/menu_block_mod.js";
 
-whenAvailable(["elements"], function() {
-    // Create the mod menu UI
-    let menuDiv = document.createElement("div");
-    menuDiv.id = "modMenuContainer";
-    menuDiv.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0, 0, 0, 0.9);
-        border: 2px solid #666;
-        border-radius: 10px;
-        padding: 20px;
-        color: white;
-        display: none;
-        z-index: 1000;
-        min-width: 300px;
-        max-height: 80vh;
-        overflow-y: auto;
-    `;
-    document.body.appendChild(menuDiv);
+whenAvailable(["elements", "pixelMap"], function() {
+    // Create the mod menu UI if it doesn't exist
+    if (!document.getElementById("modMenuContainer")) {
+        let menuDiv = document.createElement("div");
+        menuDiv.id = "modMenuContainer";
+        menuDiv.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #666;
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            display: none;
+            z-index: 1000;
+            min-width: 300px;
+            max-height: 80vh;
+            overflow-y: auto;
+        `;
+        document.body.appendChild(menuDiv);
+    }
 
     // Function to create the menu content
     function createMenuContent() {
@@ -50,7 +52,7 @@ whenAvailable(["elements"], function() {
             <div id="modCategories" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                 ${createModButtons()}
             </div>
-            <button onclick="closeModMenu()" style="
+            <button onclick="window.closeModMenu()" style="
                 position: absolute;
                 top: 10px;
                 right: 10px;
@@ -74,14 +76,14 @@ whenAvailable(["elements"], function() {
         };
 
         return Object.entries(modCategories).map(([category, mods]) => `
-            <div style="
+            <div class="mod-category" style="
                 background: #333;
                 padding: 10px;
                 border-radius: 5px;
                 text-align: center;
                 cursor: pointer;
                 transition: background 0.3s;
-            " onclick="toggleModCategory('${category}')">
+            " onclick="window.toggleModCategory('${category}')">
                 <h3 style="margin: 0; color: #4CAF50;">${category}</h3>
                 <div id="${category.replace(/\s+/g, '')}" style="display: none;">
                     ${mods.map(mod => `
@@ -93,7 +95,7 @@ whenAvailable(["elements"], function() {
                         ">
                             <label style="display: flex; align-items: center; justify-content: space-between;">
                                 <span>${mod}</span>
-                                <input type="checkbox" onchange="toggleMod('${mod}')" 
+                                <input type="checkbox" onchange="window.toggleMod('${mod}')" 
                                     ${enabledMods.includes(`mods/${mod}.js`) ? 'checked' : ''}>
                             </label>
                         </div>
@@ -105,17 +107,21 @@ whenAvailable(["elements"], function() {
 
     // Add global functions for the menu
     window.openModMenu = function() {
+        const menuDiv = document.getElementById("modMenuContainer");
         menuDiv.style.display = "block";
         menuDiv.innerHTML = createMenuContent();
     };
 
     window.closeModMenu = function() {
+        const menuDiv = document.getElementById("modMenuContainer");
         menuDiv.style.display = "none";
     };
 
     window.toggleModCategory = function(category) {
         const categoryDiv = document.getElementById(category.replace(/\s+/g, ''));
-        categoryDiv.style.display = categoryDiv.style.display === "none" ? "block" : "none";
+        if (categoryDiv) {
+            categoryDiv.style.display = categoryDiv.style.display === "none" ? "block" : "none";
+        }
     };
 
     window.toggleMod = function(mod) {
@@ -139,10 +145,20 @@ whenAvailable(["elements"], function() {
         behavior: behaviors.WALL,
         category: "solids",
         state: "solid",
-        info: "Click to open the mod menu!",
-        onClick: function(pixel) {
-            openModMenu();
+        info: "Select and click to open the mod menu!",
+        // Remove onClick as it won't work directly
+        
+        // This function runs when the element is placed
+        create: function(pixel) {
+            pixel.color = "#4CAF50";
         },
+        
+        // This is the key change - use click instead of onClick
+        click: function(pixel) {
+            window.openModMenu();
+            return true; // Prevent the element from being destroyed on click
+        },
+        
         tick: function(pixel) {
             // Add a slight pulsing effect
             if (pixelTicks % 30 === 0) {
@@ -152,14 +168,17 @@ whenAvailable(["elements"], function() {
     };
 
     // Add CSS for hover effects
-    const style = document.createElement('style');
-    style.textContent = `
-        #modMenuContainer div:hover {
-            background: #444 !important;
-        }
-        #modMenuContainer input[type="checkbox"] {
-            cursor: pointer;
-        }
-    `;
-    document.head.appendChild(style);
+    if (!document.getElementById("modMenuStyles")) {
+        const style = document.createElement('style');
+        style.id = "modMenuStyles";
+        style.textContent = `
+            #modMenuContainer .mod-category:hover {
+                background: #444 !important;
+            }
+            #modMenuContainer input[type="checkbox"] {
+                cursor: pointer;
+            }
+        `;
+        document.head.appendChild(style);
+    }
 });
