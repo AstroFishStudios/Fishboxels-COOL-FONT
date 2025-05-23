@@ -1,4 +1,4 @@
-// Sky.js
+// REAL.js
 
 // BetterSettings.js integration
 if (!enabledMods.includes("mods/betterSettings.js")) { enabledMods.unshift("mods/betterSettings.js"); localStorage.setItem("enabledMods", JSON.stringify(enabledMods)); window.location.reload() };
